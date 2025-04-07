@@ -12,7 +12,6 @@ class Effect(enum.Enum):
     HIGH_PASS_FILTER = 7
     LOW_PASS_FILTER = 8
     APPLY_OTHER_FILE = 9
-    REVERB = 10
     
     
 if __name__ == '__main__':
