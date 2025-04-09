@@ -25,6 +25,7 @@ clientname = next(argv, defaultclientname)
 servername = next(argv, None)
 
 client = jack.Client(clientname, servername=servername)
+client.blocksize = 128
 
 if client.status.server_started:
     print('JACK server started')
