@@ -41,10 +41,13 @@ def process(frames):
     # only one loop iteration (hopefully?)
     for i, o in zip(client.inports, client.outports):
         # o.get_buffer()[:] = i.get_buffer()
-        data = i.get_buffer()
-        print(ffi.from_buffer(data))
-        data = apply_effect(data, Effect.TREMOLO)
-        o.get_buffer()[:] = data
+        data = memoryview(i.get_buffer()).cast('f')
+        array_data = np.array(data)
+        print(type(data))
+        for k in range(len(data)):
+            data[k] = min(data[k] * 2, 1)
+        #data = apply_effect(data, Effect.TREMOLO)
+        o.get_buffer()[:] = i.get_buffer()
 
 @client.set_shutdown_callback
 def shutdown(status, reason):
