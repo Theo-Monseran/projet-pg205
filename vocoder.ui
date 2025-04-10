@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>964</width>
-    <height>771</height>
+    <width>853</width>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>150</y>
+      <x>160</x>
+      <y>220</y>
       <width>561</width>
       <height>281</height>
      </rect>
@@ -42,7 +42,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QLabel" name="iconLabel">
+        <widget class="QLabel" name="iconLabelNoEffect">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -55,7 +55,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="radioButtonNoEffect">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -90,7 +90,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QLabel" name="iconLabel_3">
+        <widget class="QLabel" name="iconLabelTremolo">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -103,7 +103,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_5">
+        <widget class="QRadioButton" name="radioButtonTremolo">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -138,7 +138,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QLabel" name="iconLabel_4">
+        <widget class="QLabel" name="iconLabelVibrato">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -151,7 +151,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_6">
+        <widget class="QRadioButton" name="radioButtonVibrato">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -186,7 +186,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QLabel" name="iconLabel_8">
+        <widget class="QLabel" name="iconLabelBgMusic">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -199,7 +199,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_9">
+        <widget class="QRadioButton" name="radioButtonBgMusic">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -234,7 +234,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QLabel" name="iconLabel_9">
+        <widget class="QLabel" name="iconLabelMeow">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -247,7 +247,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_10">
+        <widget class="QRadioButton" name="radioButtonMeow">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -282,7 +282,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QLabel" name="iconLabel_10">
+        <widget class="QLabel" name="iconLabelWoof">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -295,7 +295,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_11">
+        <widget class="QRadioButton" name="radioButtonWoof">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -314,7 +314,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="labelMainApp">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -334,14 +334,60 @@
      <string>Open Vocoder</string>
     </property>
    </widget>
+   <widget class="QListView" name="listView">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>170</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>140</y>
+      <width>81</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Input device</string>
+    </property>
+   </widget>
+   <widget class="QListView" name="listView_2">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>170</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>140</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Output device</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>964</width>
-     <height>22</height>
+     <width>853</width>
+     <height>23</height>
     </rect>
    </property>
   </widget>
