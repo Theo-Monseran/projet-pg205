@@ -39,14 +39,14 @@ event = threading.Event()
 def process(frames):
     assert len(client.inports) == len(client.outports)
     assert frames == client.blocksize
+    print(client.samplerate)
     # only one loop iteration (hopefully?)
-    for i, o in zip(client.inports, client.outports):
+    for i, o in zip(inports, outports):
+        print (i, o)
         # o.get_buffer()[:] = i.get_buffer()
         data = memoryview(i.get_buffer()).cast('f')
         array_data = np.array(data)
-        
-            
-        array_data = apply_effect(array_data, Effect.TREMOLO)
+        array_data = apply_effect(array_data, Effect.LOW_PASS_FILTER)
         
         for k in range(len(data)):
             data[k] = array_data[k]
@@ -79,19 +79,30 @@ with client:
 
     capture = client.get_ports(is_physical=True, is_output=True)
     print(capture)
-    print(client.inports)
+    
+    inports = [client.inports[0]]
+    outports = [client.outports[0]]
     if not capture:
         raise RuntimeError('No physical capture ports')
 
-    for src, dest in zip(capture, client.inports):
+    for src, dest in zip(capture, inports):
+        print(f"Connected {src} to {dest}")
+        
         client.connect(src, dest)
 
-    playback = client.get_ports(is_physical=True, is_input=True)
+    playback = client.get_ports(is_physical=False, is_input=True)
+    print(f"PORTS: {[(pb.name, pb.shortname) for pb in playback]}")
+    print(len(client.get_ports()))
+    print(client.get_ports())
     if not playback:
         raise RuntimeError('No physical playback ports')
 
-    for src, dest in zip(client.outports, playback):
+    exit(0)
+
+    for src, dest in zip(outports, [playback[0]]):
+        print(f"Connected {src} to {dest}")
         client.connect(src, dest)
+
 
     print('Press Ctrl+C to stop')
     try:

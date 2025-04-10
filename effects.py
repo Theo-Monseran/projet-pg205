@@ -7,8 +7,10 @@ import cProfile
 def get_pure_sound(A, f, sr, length, phi=0):
     return [A * np.sin(n * 2 * np.pi * f / sr + phi) for n in range(int(sr * length))]
 
+def normalize(sound):    
+    return sound/sound.max() if sound.max() != 0 else sound
 
-def vibrato(data, length, sr, intensity, speed):
+def vibrato(data, sr, intensity, speed):
     
     t = np.arange(len(data)) / sr
     vib = intensity * np.sin(2 * np.pi * speed * t)
@@ -16,8 +18,8 @@ def vibrato(data, length, sr, intensity, speed):
     return np.interp(indices, t, data)
 
 
-def tremolo(data, length, sr, intensity, speed):
-    return data * [intensity * np.sin(2 * np.pi * n*speed) for n in range(int(sr * length))]
+def tremolo(data, length, sr, intensity, speed, previous=0):
+    return data * [intensity * np.sin(2 * np.pi * n*speed + np.arcsin(previous)) for n in range(int(sr * length))]
 
 def pitch_shift(data, sr, shift):
     return librosa.effects.pitch_shift(np.array(data) , sr=sr, n_steps=shift)
@@ -30,7 +32,6 @@ def low_pass(x):
     for n in range(10, len(x)):
         y[n] = 0.5*x[n] + 0.5*x[n-1] + 0.5*x[n-2] + 0.5*x[n-3] + 0.5*x[n-4] + 0.5*x[n-5] + 0.5*x[n-6] + 0.5*x[n-7] + 0.5*x[n-8] + 0.5*x[n-9]
     return y
-
 
 def high_pass(x):
     y = np.zeros_like(x)
