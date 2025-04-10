@@ -17,13 +17,26 @@ def vibrato(data, length, sr, intensity, speed):
 
 
 def tremolo(data, length, sr, intensity, speed):
-    return data * [intensity * np.sin(2 * np.pi * n*speed/1000) for n in range(int(sr * length))]
+    return data * [intensity * np.sin(2 * np.pi * n*speed) for n in range(int(sr * length))]
 
 def pitch_shift(data, sr, shift):
     return librosa.effects.pitch_shift(np.array(data) , sr=sr, n_steps=shift)
 
 def intensity_mult(data, mult):
     return np.array(data) * mult
+
+def low_pass(x):
+    y = np.zeros_like(x)
+    for n in range(10, len(x)):
+        y[n] = 0.5*x[n] + 0.5*x[n-1] + 0.5*x[n-2] + 0.5*x[n-3] + 0.5*x[n-4] + 0.5*x[n-5] + 0.5*x[n-6] + 0.5*x[n-7] + 0.5*x[n-8] + 0.5*x[n-9]
+    return y
+
+
+def high_pass(x):
+    y = np.zeros_like(x)
+    for n in range(10, len(x)):
+        y[n] = 0.5*x[n] - 0.5*x[n-1] + 0.5*x[n-2] - 0.5*x[n-3] + 0.5*x[n-4] - 0.5*x[n-5] + 0.5*x[n-6] - 0.5*x[n-7] + 0.5*x[n-8] - 0.5*x[n-9]
+    return y
 
 if __name__ == "__main__":
     sound = sf.read('Enregistrement.wav')

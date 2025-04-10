@@ -25,7 +25,7 @@ clientname = next(argv, defaultclientname)
 servername = next(argv, None)
 
 client = jack.Client(clientname, servername=servername)
-client.blocksize = 128
+client.blocksize = 512
 
 if client.status.server_started:
     print('JACK server started')
@@ -44,10 +44,13 @@ def process(frames):
         # o.get_buffer()[:] = i.get_buffer()
         data = memoryview(i.get_buffer()).cast('f')
         array_data = np.array(data)
-        print(type(data))
+        
+            
+        array_data = apply_effect(array_data, Effect.TREMOLO)
+        
         for k in range(len(data)):
-            data[k] = min(data[k] * 2, 1)
-        #data = apply_effect(data, Effect.TREMOLO)
+            data[k] = array_data[k]
+            
         o.get_buffer()[:] = i.get_buffer()
 
 @client.set_shutdown_callback
@@ -75,6 +78,8 @@ with client:
     # are "output" from it.
 
     capture = client.get_ports(is_physical=True, is_output=True)
+    print(capture)
+    print(client.inports)
     if not capture:
         raise RuntimeError('No physical capture ports')
 
