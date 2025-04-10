@@ -25,15 +25,16 @@ effects: dict[Effect, typing.Callable[[np.ndarray, int], np.ndarray]] = {}
 def setup():
     effects[Effect.TREMOLO] = tremolo_wrapper()
     effects[Effect.VIBRATO] = lambda data, sr: normalize(vibrato(data, sr, 10, 10))
-    effects[Effect.HIGH_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5]))
-    effects[Effect.LOW_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5]))
+    effects[Effect.HIGH_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5]), low_pass=False)
+    effects[Effect.LOW_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5]), low_pass=True)
     effects[Effect.NO_EFFECT] = lambda data, _: data
 
 def tremolo_wrapper() -> typing.Callable:
     last_elem = 0
-    def func(*args):
+    def func(data, sr):
         nonlocal last_elem
-        data = tremolo(*args, last_elem)
+        data = tremolo(data, len(data), sr, 1, 0.05, previous=last_elem)
+        print("meowfinished")
         last_elem = data[-1]
         return data
     return func

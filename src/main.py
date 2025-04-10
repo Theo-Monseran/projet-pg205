@@ -24,8 +24,6 @@ class UI(QtWidgets.QMainWindow):
         startButton.clicked.connect(self.player.toggle)
         startButton.clicked.connect(lambda _: startButton.setText("Stop") if self.player.active else startButton.setText("Start"))
 
-def log(event):
-    print(f"Event : {event} | Type : {type(event)}")
 
 if __name__ == "__main__":
     import sys

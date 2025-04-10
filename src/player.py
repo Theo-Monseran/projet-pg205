@@ -27,7 +27,8 @@ def callback(indata, outdata, frames, time, status):
     if status:
         print(status)
     effect = get_effect(blocking_lock=True)
-    indata[0] = apply_effect(indata[0], effect)
-    indata[1] = apply_effect(indata[1], effect)
+    print(f"DEBUG: indata: {indata[:, 0]}\noutdata: {outdata}, time: {time}")
+    indata[:, 0] = apply_effect(indata[:, 0], effect)
+    indata[:, 1] = apply_effect(indata[:, 1], effect)
     outdata[:] = indata
     
