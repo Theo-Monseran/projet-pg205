@@ -47,7 +47,6 @@ parser.add_argument('--blocksize', type=int, help='block size')
 parser.add_argument('--latency', type=float, help='latency in seconds')
 args = parser.parse_args(remaining)
 
-setup()
 def callback(indata, outdata, frames, time, status):
     if status:
         print(status)

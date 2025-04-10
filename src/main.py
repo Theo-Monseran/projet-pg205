@@ -1,11 +1,13 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from mainwindow import Ui_MainWindow
 import effects.manager
+from player import VACPlayer
 
 class UI(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.player = VACPlayer()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 

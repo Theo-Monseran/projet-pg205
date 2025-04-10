@@ -3,6 +3,7 @@ import typing
 import numpy as np
 from effects.effects import *
 from threading import Lock
+import sounddevice as sd
 
 class Effect(enum.Enum):
     VIBRATO = 0
@@ -17,10 +18,38 @@ class Effect(enum.Enum):
     NO_EFFECT = 9
 
 mutex_cureff: Lock = Lock()
-current_effect: Effect | None = None
+current_effect: Effect | None = Effect.NO_EFFECT
+
+effects: dict[Effect, typing.Callable[[np.ndarray, int], np.ndarray]] = {}
 
 def setup():
-    pass
+    effects[Effect.TREMOLO] = tremolo_wrapper()
+    effects[Effect.VIBRATO] = lambda data, sr: normalize(vibrato(data, sr, 10, 10))
+    effects[Effect.HIGH_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5]))
+    effects[Effect.LOW_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5]))
+    effects[Effect.NO_EFFECT] = lambda data, _: data
+
+def tremolo_wrapper() -> typing.Callable:
+    last_elem = 0
+    def func(*args):
+        nonlocal last_elem
+        data = tremolo(*args, last_elem)
+        last_elem = data[-1]
+        return data
+    return func
+
+def available_devices() -> dict[int, str]:
+    return sd.querydevices()
+
+def get_effect(blocking_lock: bool):
+    global current_effect
+    global mutex_cureff
+    locked = mutex_cureff.acquire(blocking_lock)
+    e = None
+    if locked:
+        e = current_effect
+        mutex_cureff.release()
+    return e
 
 def set_effect(effect: Effect, blocking_lock: bool):
     """Changes the current effect to apply. Thread-safe"""
@@ -34,14 +63,6 @@ def set_effect(effect: Effect, blocking_lock: bool):
 
 
 def apply_effect(data: np.ndarray, effect: typing.Callable):
-    """Applies an audio effect onto audio stream `data`"""
-    sr = 22050
-    match effect :
-        case Effect.VIBRATO:
-            return vibrato(data, len(data) / sr, sr, 1, 0.05)
-        case Effect.TREMOLO:
-            return tremolo(data, len(data) / sr, sr, 1, 0.05)
-        case Effect.HIGH_PASS_FILTER:
-            return generic_filter(data, a=np.array([0.5, 0.5]))
-        case Effect.LOW_PASS_FILTER:
-            return generic_filter(data, a=np.array([0.5, 0.5]), low_pass=True)
+    sr = 44100
+    f = effects[effect]
+    return f(data, sr)
