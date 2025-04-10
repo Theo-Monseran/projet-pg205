@@ -7,7 +7,8 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-from effects.manager import Effect 
+from effects.manager import Effect
+from components.EffectRadioButton import EffectRadioButton
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -33,7 +34,7 @@ class Ui_MainWindow(object):
         self.iconNoEffect.setSizePolicy(sizePolicy)
         self.iconNoEffect.setObjectName("iconLabel")
         self.verticalLayout.addWidget(self.iconNoEffect)
-        self.radioNoEffect = QtWidgets.QRadioButton(parent=self.gridLayoutWidget)
+        self.radioNoEffect = EffectRadioButton(parent=self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -55,7 +56,7 @@ class Ui_MainWindow(object):
         self.iconTremolo.setSizePolicy(sizePolicy)
         self.iconTremolo.setObjectName("iconLabel_3")
         self.verticalLayout_3.addWidget(self.iconTremolo)
-        self.radioTremolo = QtWidgets.QRadioButton(parent=self.gridLayoutWidget)
+        self.radioTremolo = EffectRadioButton(parent=self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -77,7 +78,7 @@ class Ui_MainWindow(object):
         self.iconVibrato.setSizePolicy(sizePolicy)
         self.iconVibrato.setObjectName("iconLabel_4")
         self.verticalLayout_4.addWidget(self.iconVibrato)
-        self.radioVibrato = QtWidgets.QRadioButton(parent=self.gridLayoutWidget)
+        self.radioVibrato = EffectRadioButton(parent=self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -99,7 +100,7 @@ class Ui_MainWindow(object):
         self.iconBgMusic.setSizePolicy(sizePolicy)
         self.iconBgMusic.setObjectName("iconLabel_8")
         self.verticalLayout_8.addWidget(self.iconBgMusic)
-        self.radioApplyFile = QtWidgets.QRadioButton(parent=self.gridLayoutWidget)
+        self.radioApplyFile = EffectRadioButton(parent=self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -121,7 +122,7 @@ class Ui_MainWindow(object):
         self.iconHighPassFilter.setSizePolicy(sizePolicy)
         self.iconHighPassFilter.setObjectName("iconLabel_9")
         self.verticalLayout_9.addWidget(self.iconHighPassFilter)
-        self.radioHighPassFilter = QtWidgets.QRadioButton(parent=self.gridLayoutWidget)
+        self.radioHighPassFilter = EffectRadioButton(parent=self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -143,7 +144,7 @@ class Ui_MainWindow(object):
         self.iconLowPassFilter.setSizePolicy(sizePolicy)
         self.iconLowPassFilter.setObjectName("iconLabel_10")
         self.verticalLayout_10.addWidget(self.iconLowPassFilter)
-        self.radioLowPassFilter = QtWidgets.QRadioButton(parent=self.gridLayoutWidget)
+        self.radioLowPassFilter = EffectRadioButton(parent=self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -190,7 +191,7 @@ class Ui_MainWindow(object):
         self.radioLowPassFilter.setText(_translate("MainWindow", "Low pass filter"))
         self.appTitle.setText(_translate("MainWindow", "Open Vocoder"))
     
-    def radio_buttons(self):
+    def get_radio_buttons(self):
         """Returns references to all radio buttons"""
         return {
             Effect.NO_EFFECT: self.radioNoEffect,

@@ -27,17 +27,17 @@ def pitch_shift(data, sr, shift):
 def intensity_mult(data, mult):
     return np.array(data) * mult
 
-def low_pass(x):
-    y = np.zeros_like(x)
-    for n in range(10, len(x)):
-        y[n] = 0.5*x[n] + 0.5*x[n-1] + 0.5*x[n-2] + 0.5*x[n-3] + 0.5*x[n-4] + 0.5*x[n-5] + 0.5*x[n-6] + 0.5*x[n-7] + 0.5*x[n-8] + 0.5*x[n-9]
-    return y
+def generic_filter(x: np.ndarray, a: np.ndarray, low_pass: bool) -> np.ndarray: 
+     sign = 1 if low_pass else -1
+     y = np.zeros(len(x))
+     for n in range(0, len(x)):
+         y[n] = x[n] * a[0]
+         for i in range(1, len(a)):
+             if i >= n:
+                 break
+             y[n] += sign * a[i] * x[n - i]
+     return normalize(y)
 
-def high_pass(x):
-    y = np.zeros_like(x)
-    for n in range(10, len(x)):
-        y[n] = 0.5*x[n] - 0.5*x[n-1] + 0.5*x[n-2] - 0.5*x[n-3] + 0.5*x[n-4] - 0.5*x[n-5] + 0.5*x[n-6] - 0.5*x[n-7] + 0.5*x[n-8] - 0.5*x[n-9]
-    return y
 
 if __name__ == "__main__":
     sound = sf.read('Enregistrement.wav')

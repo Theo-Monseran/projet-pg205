@@ -1,7 +1,7 @@
 import enum
 import typing
 import numpy as np
-from effects import *
+from effects.effects import *
 from threading import Lock
 
 class Effect(enum.Enum):
@@ -19,14 +19,17 @@ class Effect(enum.Enum):
 mutex_cureff: Lock = Lock()
 current_effect: Effect | None = None
 
+def setup():
+    pass
 
 def set_effect(effect: Effect, blocking_lock: bool):
     """Changes the current effect to apply. Thread-safe"""
     global current_effect
     global mutex_cureff
     locked = mutex_cureff.acquire(blocking_lock)
-    current_effect = effect
     if locked:
+        print(f"[Log]: Effect changed to {effect}")
+        current_effect = effect
         mutex_cureff.release()
 
 
@@ -39,15 +42,6 @@ def apply_effect(data: np.ndarray, effect: typing.Callable):
         case Effect.TREMOLO:
             return tremolo(data, len(data) / sr, sr, 1, 0.05)
         case Effect.HIGH_PASS_FILTER:
-            return high_pass(data)
+            return generic_filter(data, a=np.array([0.5, 0.5]))
         case Effect.LOW_PASS_FILTER:
-            return low_pass(data)
-
-
-if __name__ == '__main__':
-    mido = open_midi("example.midi")
-    audio = open_audio("sound.wav")
-
-    modified = apply_pitch_effect(mido, audio, Effect.VIBRATO)
-    # modified = adapt_pitch_to(mido, audio)    
-    export_mp3(modified)
+            return generic_filter(data, a=np.array([0.5, 0.5]), low_pass=True)
