@@ -7,14 +7,14 @@ class UI(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.player = VACPlayer()
-        self.player.start()
-
-        self.__setup_mouse_events()
+        self.player = VACPlayer(device=(1, 6))
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.__setup_mouse_events()
+        
+        
     def __setup_mouse_events(self):
         for effect, rb in self.ui.get_radio_buttons().items():
             rb.effect = effect
@@ -29,13 +29,12 @@ def log(event):
 
 if __name__ == "__main__":
     import sys
+
+    effects.manager.setup()
+
     app = QtWidgets.QApplication(sys.argv)
     win = UI()
     win.show()
     
-    
-
-
-    effects.manager.setup()
     
     sys.exit(app.exec())

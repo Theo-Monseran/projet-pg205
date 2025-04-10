@@ -3,10 +3,10 @@ import sounddevice as sd
 
 class VACPlayer:
     def __init__(self, device=None, samplerate=44100, blocksize=512, channels=2):
-        self.stream = sd.Stream(samplerate=samplerate, blocksize=blocksize, channels=channels, callback=callback, latency="low")
+        self.stream = sd.Stream(device=device, samplerate=samplerate, blocksize=blocksize, channels=channels, callback=callback, latency="low")
         self.active = False
 
-    def toggle(self, _):
+    def toggle(self, active):
         if self.active:
             self.stream.stop()
         else:
