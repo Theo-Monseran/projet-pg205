@@ -10,11 +10,11 @@ from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QMainWindow,
     QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        if not MainWindow.objectName():
-            MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(964, 771)
-        self.centralwidget = QWidget(MainWindow)
+    def setupUi(self, mw):
+        # if not mw.objectName():
+        #     mw.setObjectName("MainWindow")
+        # mw.resize(964, 771)
+        self.centralwidget = QWidget(mw)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayoutWidget = QWidget(self.centralwidget)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
@@ -168,18 +168,18 @@ class Ui_MainWindow(object):
         font.setPointSize(36)
         font.setBold(True)
         self.label.setFont(font)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QMenuBar(MainWindow)
+        mw.setCentralWidget(self.centralwidget)
+        self.menubar = QMenuBar(mw)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 964, 22))
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QStatusBar(MainWindow)
+        mw.setMenuBar(self.menubar)
+        self.statusbar = QStatusBar(mw)
         self.statusbar.setObjectName(u"statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        mw.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
+        self.retranslateUi(mw)
 
-        QMetaObject.connectSlotsByName(MainWindow)
+        QMetaObject.connectSlotsByName(mw)
     # setupUi
 
     def retranslateUi(self, MainWindow):

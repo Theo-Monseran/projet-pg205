@@ -183,11 +183,11 @@ class Ui_MainWindow(object):
         self.iconVibrato.setText(_translate("MainWindow", "Icon"))
         self.radioVibrato.setText(_translate("MainWindow", "Vibrato"))
         self.iconBgMusic.setText(_translate("MainWindow", "Icon"))
-        self.radioApplyFile.setText(_translate("MainWindow", "Background music"))
+        self.radioApplyFile.setText(_translate("MainWindow", "Apply file"))
         self.iconHighPassFilter.setText(_translate("MainWindow", "Icon"))
-        self.radioHighPassFilter.setText(_translate("MainWindow", "Meow"))
+        self.radioHighPassFilter.setText(_translate("MainWindow", "High pass filter"))
         self.iconLowPassFilter.setText(_translate("MainWindow", "Icon"))
-        self.radioLowPassFilter.setText(_translate("MainWindow", "Woof"))
+        self.radioLowPassFilter.setText(_translate("MainWindow", "Low pass filter"))
         self.appTitle.setText(_translate("MainWindow", "Open Vocoder"))
     
     def radio_buttons(self):
