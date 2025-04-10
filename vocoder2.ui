@@ -186,7 +186,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QLabel" name="iconLabelBgMusic">
+        <widget class="QLabel" name="iconLabelApplyFile">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -199,7 +199,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButtonBgMusic">
+        <widget class="QRadioButton" name="radioButtonApplyFile">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -234,7 +234,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QLabel" name="iconLabelMeow">
+        <widget class="QLabel" name="iconLabelLowPassFilter">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -247,7 +247,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButtonMeow">
+        <widget class="QRadioButton" name="radioButtonLowPassFilter">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -282,7 +282,7 @@
         <number>8</number>
        </property>
        <item>
-        <widget class="QLabel" name="iconLabelWoof">
+        <widget class="QLabel" name="iconLabelHighPassFilter">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -295,7 +295,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButtonWoof">
+        <widget class="QRadioButton" name="radioButtonHighPassFilter">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -334,7 +334,7 @@
      <string>Open Vocoder</string>
     </property>
    </widget>
-   <widget class="QListView" name="listView">
+   <widget class="QListView" name="inputListView">
     <property name="geometry">
      <rect>
       <x>220</x>
@@ -344,7 +344,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="labelInputDevice">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -357,7 +357,7 @@
      <string>Input device</string>
     </property>
    </widget>
-   <widget class="QListView" name="listView_2">
+   <widget class="QListView" name="outputListView">
     <property name="geometry">
      <rect>
       <x>520</x>
@@ -367,7 +367,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="labelOutputDevice">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -380,11 +380,11 @@
      <string>Output device</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="toggleStartButton">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>100</y>
+      <x>390</x>
+      <y>90</y>
       <width>94</width>
       <height>26</height>
      </rect>
