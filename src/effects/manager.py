@@ -4,6 +4,8 @@ import numpy as np
 from effects.effects import *
 from threading import Lock
 import sounddevice as sd
+import soundfile as sf
+import playsound as ps
 
 class Effect(enum.Enum):
     VIBRATO = 0
@@ -18,29 +20,70 @@ class Effect(enum.Enum):
     NO_EFFECT = 9
 
 mutex_cureff: Lock = Lock()
-current_effect: Effect | None = Effect.NO_EFFECT
+current_effect: Effect = Effect.NO_EFFECT
 
 effects: dict[Effect, typing.Callable[[np.ndarray, int], np.ndarray]] = {}
+blocksize = 0
+
+class ApplyFile:
+    def __init__(self):
+        self.audio, sr = sf.read("rff_winter_theme_44100.mp3")
+        print(sr)
+        self.offset = 0
+        self.i = 0
+        self.A = 0.1
+
+    def add_audio_file(self, data, sr):
+        global blocksize
+        bs = blocksize
+        data[:] += normalize(self.A * self.audio[:, self.i][self.offset:self.offset+bs], self.audio.max())
+        self.i = (self.i + 1) % 2
+    
+        if self.i == 0:
+            self.offset = self.offset + bs % len(self.audio)
+    
+        return data
+
+af = ApplyFile()
+
+class Tremolo:
+    def __init__(self):
+        self.phi = 0
+        self.nmax = 0
+    
+    def tremolo(self, data, sr):
+        d = normalize(tremolo(data, 3, 1, sr, phi=self.phi), self.nmax)
+        self.phi += len(data)
+        self.nmax = d.max() if d.max() >= self.nmax else self.nmax
+        return d
+
+tr = Tremolo()
+
+class Vibrato:
+    def __init__(self):
+        self.phi = 0
+        self.nmax = 0
+    
+    def vibrato(self, data, sr):
+        print(f"maxvalue: {self.nmax}")
+        d = normalize(vibrato(data, 10, 5, sr, phi=self.phi), self.nmax)
+        self.phi += len(data)
+        self.nmax = d.max() if d.max() >= self.nmax else self.nmax
+        return d
+
+vb = Vibrato()
 
 def setup():
-    effects[Effect.TREMOLO] = tremolo_wrapper()
-    effects[Effect.VIBRATO] = lambda data, sr: normalize(vibrato(data, sr, 10, 10))
-    effects[Effect.HIGH_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5]), low_pass=False)
-    effects[Effect.LOW_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5]), low_pass=True)
     effects[Effect.NO_EFFECT] = lambda data, _: data
+    effects[Effect.TREMOLO] = lambda data, sr: tr.tremolo(data, sr)
+    effects[Effect.VIBRATO] = lambda data, sr: vb.vibrato(data, sr)
+    effects[Effect.HIGH_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5], dtype=np.float32), low_pass=False)
+    effects[Effect.LOW_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5], dtype=np.float32), low_pass=True)
+    effects[Effect.APPLY_OTHER_FILE] = af.add_audio_file
 
-def tremolo_wrapper() -> typing.Callable:
-    last_elem = 0
-    def func(data, sr):
-        nonlocal last_elem
-        data = tremolo(data, len(data), sr, 1, 0.05, previous=last_elem)
-        print("meowfinished")
-        last_elem = data[-1]
-        return data
-    return func
 
 def available_devices() -> dict[int, str]:
-    return sd.querydevices()
+    return sd.query_devices()
 
 def get_effect(blocking_lock: bool):
     global current_effect
@@ -66,4 +109,6 @@ def set_effect(effect: Effect, blocking_lock: bool):
 def apply_effect(data: np.ndarray, effect: typing.Callable):
     sr = 44100
     f = effects[effect]
-    return f(data, sr)
+    d = f(data, sr)
+    print(f"DTYPE: {d.dtype}")
+    return d

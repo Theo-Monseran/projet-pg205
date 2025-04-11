@@ -7,8 +7,8 @@ class UI(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.player = VACPlayer(device=(1, 6))
-
+        self.player = VACPlayer(samplerate=44100, blocksize=44100//15)#device=(1, 6))
+        effects.manager.blocksize = VACPlayer.blocksize
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
