@@ -73,12 +73,30 @@ class Vibrato:
 
 vb = Vibrato()
 
+class GenericFilter:
+
+    def __init__(self):
+        self.nmax = 0
+    
+    def low_pass(self, data, sr):
+        d = normalize(generic_filter(data, a=np.array([0.5, 0.5], dtype=np.float32), low_pass=True), self.nmax)
+        self.nmax = d.max() if d.max() >= self.nmax else self.nmax
+        return d
+
+    def high_pass(self, data, sr):
+        d = normalize(generic_filter(data, a=np.array([0.5, 0.5], dtype=np.float32), low_pass=False), self.nmax)
+        self.nmax = d.max() if d.max() >= self.nmax else self.nmax
+        return d
+
+lp = GenericFilter()
+hp = GenericFilter()
+
 def setup():
     effects[Effect.NO_EFFECT] = lambda data, _: data
     effects[Effect.TREMOLO] = lambda data, sr: tr.tremolo(data, sr)
     effects[Effect.VIBRATO] = lambda data, sr: vb.vibrato(data, sr)
-    effects[Effect.HIGH_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5], dtype=np.float32), low_pass=False)
-    effects[Effect.LOW_PASS_FILTER] = lambda data, _: generic_filter(data, a=np.array([0.5, 0.5], dtype=np.float32), low_pass=True)
+    effects[Effect.HIGH_PASS_FILTER] = lambda data, sr: lp.low_pass(data, sr)
+    effects[Effect.LOW_PASS_FILTER] = lambda data, sr: hp.high_pass(data, sr)
     effects[Effect.APPLY_OTHER_FILE] = af.add_audio_file
 
 

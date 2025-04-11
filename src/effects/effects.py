@@ -42,7 +42,7 @@ def generic_filter(x: np.ndarray, a: np.ndarray, low_pass: bool) -> np.ndarray:
              if i >= n:
                  break
              y[n] += sign * a[i] * x[n - i]
-     return normalize(y)
+     return y
 
 
 if __name__ == "__main__":
