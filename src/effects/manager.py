@@ -42,7 +42,7 @@ class ApplyFile:
         if self.i == 0:
             self.offset = self.offset + bs % len(self.audio)
     
-        return data
+        return 0.2 * data
 
 af = ApplyFile()
 
@@ -128,5 +128,4 @@ def apply_effect(data: np.ndarray, effect: typing.Callable):
     sr = 44100
     f = effects[effect]
     d = f(data, sr)
-    print(f"DTYPE: {d.dtype}")
     return d

@@ -12,7 +12,6 @@ class VACPlayer:
         self.stream = sd.Stream(device=device, samplerate=samplerate, blocksize=blocksize, channels=channels, callback=callback, latency=0.05, dtype=np.float32, dither_off=True)
         VACPlayer.blocksize = self.stream.blocksize
         VACPlayer.samplerate = self.stream.samplerate
-        print(self.stream.samplerate)
         self.active = False
 
     def toggle(self, active):
@@ -40,8 +39,8 @@ def callback(indata, outdata, frames, time, status):
     if status:
         print(status)
     
-    if data is None:
-        data = np.zeros(indata.shape)
+    #if data is None:
+    #    data = np.zeros(indata.shape)
 
     # print(f"LENGTH:{len(data[:, 0])}")
     
@@ -50,7 +49,7 @@ def callback(indata, outdata, frames, time, status):
     #     exit(0)
 
     effect = get_effect(blocking_lock=True)
-    print(f"DEBUG:\n time: {time}\nframes: {frames}")
+    #print(f"DEBUG:\n time: {time}\nframes: {frames}")
     
     indata[:, 0] = nr.reduce_noise(indata[:, 0], VACPlayer.samplerate)
     indata[:, 1] = nr.reduce_noise(indata[:, 1], VACPlayer.samplerate)
@@ -59,7 +58,7 @@ def callback(indata, outdata, frames, time, status):
     indata[:, 1] = apply_effect(indata[:, 1], effect)
 
 
-    data = np.concatenate((data, indata))
+    #data = np.concatenate((data, indata))
 
     outdata[:] = indata
     
