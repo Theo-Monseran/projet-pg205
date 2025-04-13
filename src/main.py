@@ -14,11 +14,17 @@ class UI(QtWidgets.QMainWindow):
 
         self.__setup_mouse_events()
         
-        
+    
+    def __change_effect(self, e: effects.manager.Effect):
+        self.player.toggle(False) # OFF
+        effects.manager.set_effect(e, True)
+        self.player.toggle(True) # ON
+
+
     def __setup_mouse_events(self):
         for effect, rb in self.ui.get_radio_buttons().items():
             rb.effect = effect
-            rb.effectSelected.connect(lambda e: effects.manager.set_effect(e, True))
+            rb.effectSelected.connect(self.__change_effect)
 
         startButton = self.ui.get_start_button()
         startButton.clicked.connect(self.player.toggle)

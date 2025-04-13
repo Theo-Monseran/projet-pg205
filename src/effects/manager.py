@@ -66,7 +66,7 @@ class Vibrato:
     
     def vibrato(self, data, sr):
         print(f"maxvalue: {self.nmax}")
-        d = normalize(vibrato(data, 10, 5, sr, phi=self.phi), self.nmax)
+        d = normalize(vibrato(data, 0.1, 0.2, sr, phi=self.phi), self.nmax)
         self.phi += len(data)
         self.nmax = d.max() if d.max() >= self.nmax else self.nmax
         return d
@@ -103,7 +103,7 @@ def setup():
 def available_devices() -> dict[int, str]:
     return sd.query_devices()
 
-def get_effect(blocking_lock: bool):
+def get_effect(blocking_lock: bool) -> tuple[Effect, bool]:
     global current_effect
     global mutex_cureff
     locked = mutex_cureff.acquire(blocking_lock)
@@ -111,7 +111,7 @@ def get_effect(blocking_lock: bool):
     if locked:
         e = current_effect
         mutex_cureff.release()
-    return e
+    return e, locked
 
 def set_effect(effect: Effect, blocking_lock: bool):
     """Changes the current effect to apply. Thread-safe"""

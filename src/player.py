@@ -8,8 +8,10 @@ class VACPlayer:
     blocksize = 0
     samplerate = 0
 
+    effect = Effect.NO_EFFECT
+
     def __init__(self, device=None, samplerate=44100, blocksize=512, channels=2):
-        self.stream = sd.Stream(device=device, samplerate=samplerate, blocksize=blocksize, channels=channels, callback=callback, latency=0.05, dtype=np.float32, dither_off=True)
+        self.stream = sd.Stream(device=device, samplerate=samplerate, blocksize=blocksize, channels=channels, callback=VACPlayer.callback, latency=0.05, dtype=np.float32, dither_off=True)
         VACPlayer.blocksize = self.stream.blocksize
         VACPlayer.samplerate = self.stream.samplerate
         self.active = False
@@ -27,38 +29,40 @@ class VACPlayer:
         
         sr, bs, c, l = self.stream.samplerate, self.stream.blocksize, self.stream.channels, self.stream.latency
         self.stream.stop()
-        self.stream = sd.Stream(device=device, samplerate=sr, blocksize=bs, channels=c, callback=callback, latency=l, dtype=np.float32, dither_off=True)
+        self.stream = sd.Stream(device=device, samplerate=sr, blocksize=bs, channels=c, callback=VACPlayer.callback, latency=l, dtype=np.float32, dither_off=True)
         VACPlayer.blocksize = self.stream.blocksize
         VACPlayer.samplerate = self.stream.samplerate
         self.stream.start()
 
-data = None
-import soundfile as sf
-def callback(indata, outdata, frames, time, status):
-    global data
-    if status:
-        print(status)
-    
-    #if data is None:
-    #    data = np.zeros(indata.shape)
+    @staticmethod
+    def callback(indata, outdata, frames, time, status):
+        global data
+        if status:
+            print(status)
+        
+        #if data is None:
+        #    data = np.zeros(indata.shape)
 
-    # print(f"LENGTH:{len(data[:, 0])}")
-    
-    # if len(data[:, 0]) >= 44100 * 5:
-    #     sf.write("vibrato_data.mp3", data[:, 0], 44100)
-    #     exit(0)
+        # print(f"LENGTH:{len(data[:, 0])}")
+        
+        # if len(data[:, 0]) >= 44100 * 5:
+        #     sf.write("vibrato_data.mp3", data[:, 0], 44100)
+        #     exit(0)
 
-    effect = get_effect(blocking_lock=True)
-    #print(f"DEBUG:\n time: {time}\nframes: {frames}")
-    
-    indata[:, 0] = nr.reduce_noise(indata[:, 0], VACPlayer.samplerate)
-    indata[:, 1] = nr.reduce_noise(indata[:, 1], VACPlayer.samplerate)
+        e, locked = get_effect(blocking_lock=False)
+        if locked:
+            VACPlayer.effect = e
+        #print(f"DEBUG:\n time: {time}\nframes: {frames}")
+        
+        indata[:, 0] = nr.reduce_noise(indata[:, 0], VACPlayer.samplerate)
+        indata[:, 1] = nr.reduce_noise(indata[:, 1], VACPlayer.samplerate)
 
-    indata[:, 0] = apply_effect(indata[:, 0], effect)
-    indata[:, 1] = apply_effect(indata[:, 1], effect)
+        indata[:, 0] = apply_effect(indata[:, 0], VACPlayer.effect)
+        indata[:, 1] = apply_effect(indata[:, 1], VACPlayer.effect)
 
 
-    #data = np.concatenate((data, indata))
+        #data = np.concatenate((data, indata))
 
-    outdata[:] = indata
+        outdata[:] = indata
+
     
